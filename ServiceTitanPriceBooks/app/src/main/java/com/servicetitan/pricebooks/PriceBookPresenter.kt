@@ -36,7 +36,10 @@ class PriceBookPresenter {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({response ->
                 hasMoreData = response.hasMore
-                currentPage += response.page
+                currentPage += when(hasMoreData) {
+                    true -> 1
+                    false -> 0
+                }
                 view.showLoading(isLoading = false)
                 view.showBookList(bookList = response.data)
             }, {
